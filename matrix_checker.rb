@@ -1,33 +1,3 @@
-a = [
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9]
-]
-
-b = [
-  [2, 7, 6],
-  [9, 5, 1],
-  [4, 3, 8]
-]
-
-c = [
-  [2, 2, 2],
-  [2, 2, 2],
-  [2, 2, 2]
-]
-
-d = [
-  [1, 6, 5],
-  [8, 4, 0],
-  [3, 2, 7]
-]
-
-e = [
-  [91, 96, 95],
-  [98, 94, 90],
-  [93, 92, 97]
-]
-
 class MatrixChecker
   attr_reader :matrix
   private :matrix
@@ -85,17 +55,50 @@ class MatrixChecker
   end
 end
 
-{
+a = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9]
+]
+
+b = [
+  [2, 7, 6],
+  [9, 5, 1],
+  [4, 3, 8]
+]
+
+c = [
+  [2, 2, 2],
+  [2, 2, 2],
+  [2, 2, 2]
+]
+
+d = [
+  [1, 6, 5],
+  [8, 4, 0],
+  [3, 2, 7]
+]
+
+e = [
+  [91, 96, 95],
+  [98, 94, 90],
+  [93, 92, 97]
+]
+
+EXPECTATIONS = {
   a => false,
   b => true,
   c => false,
   d => false,
   e => false
-}.each do |matrix, expected_result|
+}
+
+EXPECTATIONS.each do |matrix, expected_result|
   result = MatrixChecker.new(matrix).magic?
+
   if result == expected_result
-    puts "Expectation for #{ matrix } passed (magic? => '#{ expected_result }')."
+    puts "++ Expectation for #{ matrix } passed: '#{ expected_result }' expected, '#{ result }' received."
   else
-    raise StandardError, "Incorrect result for #{ matrix }. '#{ expected_result }' expected, '#{ result }' received."
+    puts "-- Expectation for #{ matrix } didn't pass: '#{ expected_result }' expected, '#{ result }' received."
   end
 end
