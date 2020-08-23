@@ -39,40 +39,29 @@ class MatrixChecker
   def magic?
     uniq_values? && valid_range? &&
       row_sum == column_sum &&
-      row_sum == diagonal1_sum &&
-      row_sum == diagonal2_sum &&
-      rows_magic? && columns_magic?
+      row_sum == diagonal_sum(matrix) &&
+      row_sum == diagonal_sum(matrix.reverse) &&
+      rows_sum_equal?(matrix) &&
+      rows_sum_equal?(transformed_matrix)
   end
 
   private
 
   def uniq_values?
-    flatten_list.size == flatten_list.uniq.size
+    flatten_matrix.size == flatten_matrix.uniq.size
   end
 
   def valid_range?
-    range = 1..(flatten_list.size ** 2)
-    range.cover?(Range.new(*flatten_list.minmax))
+    range = 1..(flatten_matrix.size ** 2)
+    range.cover?(Range.new(*flatten_matrix.minmax))
   end
 
-  def flatten_list
-    @flatten_list ||= matrix.flatten
+  def flatten_matrix
+    @flatten_matrix ||= matrix.flatten
   end
 
-  def rows_magic?
-    matrix.map { |list| list.sum }.uniq.size == 1
-  end
-
-  def columns_magic?
-    transformed_matrix.map { |list| list.sum }.uniq.size == 1
-  end
-
-  def diagonal1_sum
-    matrix.each_with_index.sum { |list, index| list[index] }
-  end
-
-  def diagonal2_sum
-    matrix.reverse.each_with_index.sum { |list, index| list[index] }
+  def diagonal_sum(given_matrix)
+    given_matrix.each_with_index.sum { |list, index| list[index] }
   end
 
   def row_sum
@@ -81,6 +70,10 @@ class MatrixChecker
 
   def column_sum
     matrix.map(&:first).sum
+  end
+
+  def rows_sum_equal?(given_matrix)
+    given_matrix.map { |list| list.sum }.uniq.size == 1
   end
 
   def transformed_matrix
@@ -92,8 +85,17 @@ class MatrixChecker
   end
 end
 
-p MatrixChecker.new(a).magic? # => false
-p MatrixChecker.new(b).magic? # => true
-p MatrixChecker.new(c).magic? # => false
-p MatrixChecker.new(d).magic? # => false
-p MatrixChecker.new(e).magic? # => false
+{
+  a => false,
+  b => true,
+  c => false,
+  d => false,
+  e => false
+}.each do |matrix, expected_result|
+  result = MatrixChecker.new(matrix).magic?
+  if result == expected_result
+    puts "Expectation for #{ matrix } passed (magic? => '#{ expected_result }')."
+  else
+    raise StandardError, "Incorrect result for #{ matrix }. '#{ expected_result }' expected, '#{ result }' received."
+  end
+end
