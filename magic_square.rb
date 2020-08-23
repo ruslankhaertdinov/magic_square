@@ -1,4 +1,4 @@
-class MatrixChecker
+class MagicSquare
   attr_reader :matrix
   private :matrix
 
@@ -6,7 +6,7 @@ class MatrixChecker
     @matrix = matrix
   end
 
-  def magic?
+  def valid?
     uniq_values? && valid_range? &&
       row_sum == column_sum &&
       row_sum == diagonal_sum(matrix) &&
@@ -94,7 +94,7 @@ EXPECTATIONS = {
 }
 
 EXPECTATIONS.each do |matrix, expected_result|
-  result = MatrixChecker.new(matrix).magic?
+  result = MagicSquare.new(matrix).valid?
 
   if result == expected_result
     puts "++ Expectation for #{ matrix } passed: '#{ expected_result }' expected, '#{ result }' received."
